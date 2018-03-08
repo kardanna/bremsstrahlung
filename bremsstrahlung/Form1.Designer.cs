@@ -34,6 +34,8 @@
             DevExpress.XtraCharts.LineSeriesView lineSeriesView1 = new DevExpress.XtraCharts.LineSeriesView();
             DevExpress.XtraCharts.Series series2 = new DevExpress.XtraCharts.Series();
             DevExpress.XtraCharts.LineSeriesView lineSeriesView2 = new DevExpress.XtraCharts.LineSeriesView();
+            DevExpress.XtraCharts.Series series3 = new DevExpress.XtraCharts.Series();
+            DevExpress.XtraCharts.LineSeriesView lineSeriesView3 = new DevExpress.XtraCharts.LineSeriesView();
             this.GammaSpectrRangeControl = new DevExpress.XtraEditors.RangeControl();
             this.GammaSpectrChart = new DevExpress.XtraCharts.ChartControl();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
@@ -51,6 +53,8 @@
             ((System.ComponentModel.ISupportInitialize)(lineSeriesView1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(series2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(lineSeriesView2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(series3)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(lineSeriesView3)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -93,9 +97,12 @@
             series1.View = lineSeriesView1;
             series2.Name = "Энергия";
             series2.View = lineSeriesView2;
+            series3.Name = "Сглаживание";
+            series3.View = lineSeriesView3;
             this.GammaSpectrChart.SeriesSerializable = new DevExpress.XtraCharts.Series[] {
         series1,
-        series2};
+        series2,
+        series3};
             this.GammaSpectrChart.Size = new System.Drawing.Size(826, 463);
             this.GammaSpectrChart.TabIndex = 0;
             // 
@@ -184,6 +191,8 @@
             ((System.ComponentModel.ISupportInitialize)(series1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(lineSeriesView2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(series2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(lineSeriesView3)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(series3)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.GammaSpectrChart)).EndInit();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();

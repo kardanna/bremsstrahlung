@@ -62,9 +62,9 @@ namespace bremsstrahlung
             }
         }
 
-        SpectrFile Spectr = new SpectrFile();
-        SpectrFile Background = new SpectrFile();
-        SpectrFile WorkingSpectr = new SpectrFile();
+        public SpectrFile Spectr = new SpectrFile();
+        public SpectrFile Background = new SpectrFile();
+        public SpectrFile WorkingSpectr = new SpectrFile();
 
 
         void OpenFileProcedure()
@@ -125,6 +125,7 @@ namespace bremsstrahlung
         {
             GammaSpectrChart.Series["Спектр"].Points.Clear();
             GammaSpectrChart.Series["Энергия"].Points.Clear();
+            GammaSpectrChart.Series["Сглаживание"].Points.Clear();
             for (int counterI = 0; counterI < 1024; counterI++)
             {
                 GammaSpectrChart.Series["Спектр"].Points.Add(new SeriesPoint(counterI + 1, Source.GammaSpectr[counterI]));
@@ -150,7 +151,9 @@ namespace bremsstrahlung
 
         private void SpectrometryHandlerMenuButton_Click(object sender, EventArgs e)
         {
-
+            SpectrometryHandler spectrometryHandler = new SpectrometryHandler();
+            spectrometryHandler.Owner = this;
+            spectrometryHandler.Show();
         }
 
         private void BackgroundSunstraction_Click(object sender, EventArgs e)
@@ -178,6 +181,15 @@ namespace bremsstrahlung
                     Spectr.FileName = openFileDialog.FileName;
                     OpenFileProcedure();
                 }
+            }
+        }
+
+        public void DrawFromHandlerProcedure(double[] SmoothingSource)
+        {
+            GammaSpectrChart.Series["Сглаживание"].Points.Clear();
+            for (int counterI = 0; counterI < 1024; counterI++)
+            {
+                GammaSpectrChart.Series["Сглаживание"].Points.Add(new SeriesPoint(counterI + 1, SmoothingSource[counterI]));
             }
         }
 
