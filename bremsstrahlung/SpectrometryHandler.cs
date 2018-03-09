@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using DevExpress.XtraCharts;
 
 namespace bremsstrahlung
 {
@@ -75,6 +76,8 @@ namespace bremsstrahlung
             double[] SavitzkyGolayFirstDerivativeSeries = new double[1024];
             double[] SavitzkyGolaySecondDerivativeSeries = new double[1024];
             double[] SourceData = new double[1024];
+            double[] RWC = new double[1024];
+            double[] SD = new double[1024];
 
             //Сглаживание
             for (int counterI = 0; counterI < (SmoothingWindowWidth - 1) / 2; counterI++)
@@ -131,10 +134,61 @@ namespace bremsstrahlung
                 }
             }
 
-
+            //Поиск пиков
+            mainForm.GammaSpectrChart.Series["Пики"].Points.Clear();
+            for (int counterI = 2; counterI < 950; counterI++)
+            {
+                if (SavitzkyGolayFirstDerivativeSeries[counterI - 2] > 0 && SavitzkyGolayFirstDerivativeSeries[counterI - 1] > 0 && SavitzkyGolayFirstDerivativeSeries[counterI] > 0 &&
+                    SavitzkyGolayFirstDerivativeSeries[counterI + 1] < 0 && SavitzkyGolayFirstDerivativeSeries[counterI + 2] < 0 && SavitzkyGolayFirstDerivativeSeries[counterI + 3] < 0)
+                {
+                    int Range = (int)Math.Round(mainForm.WorkingSpectr.Resolution[counterI] + mainForm.WorkingSpectr.Resolution[counterI]);
+                    if (Range % 2 == 0) Range++;
+                    RWC[counterI] = 0;
+                    SD[counterI] = 0;
+                    for (int counterJ = counterI - Range; counterJ < counterI; counterJ++)
+                    {
+                        RWC[counterI] -= SourceData[counterJ];
+                        SD[counterI] += SourceData[counterJ];
+                    }
+                    for (int counterJ = counterI; counterJ < counterI + Range; counterJ++)
+                    {
+                        RWC[counterI] += 2 * SourceData[counterJ];
+                        SD[counterI] += 4 * SourceData[counterJ];
+                    }
+                    for (int counterJ = counterI + Range; counterJ < counterI + 2 * Range; counterJ++)
+                    {
+                        RWC[counterI] -= SourceData[counterJ];
+                        SD[counterI] += SourceData[counterJ];
+                    }
+                    RWC[counterI + 1] = 0;
+                    SD[counterI + 1] = 0;
+                    for (int counterJ = counterI + 1 - Range; counterJ < counterI + 1; counterJ++)
+                    {
+                        RWC[counterI + 1] -= SourceData[counterJ];
+                        SD[counterI + 1] += SourceData[counterJ];
+                    }
+                    for (int counterJ = counterI + 1; counterJ < counterI + 1 + Range; counterJ++)
+                    {
+                        RWC[counterI + 1] += 2 * SourceData[counterJ];
+                        SD[counterI + 1] += 4 * SourceData[counterJ];
+                    }
+                    for (int counterJ = counterI + 1 + Range; counterJ < counterI + 1 + 2 * Range; counterJ++)
+                    {
+                        RWC[counterI + 1] -= SourceData[counterJ];
+                        SD[counterI + 1] += SourceData[counterJ];
+                    }
+                    if (RWC[counterI]/Math.Sqrt(SD[counterI]) > RWC[counterI + 1] / Math.Sqrt(SD[counterI + 1]) && RWC[counterI] / Math.Sqrt(SD[counterI]) > 4)
+                    {
+                        mainForm.GammaSpectrChart.Series["Пики"].Points.Add(new SeriesPoint(counterI + 1, mainForm.WorkingSpectr.GammaSpectr[counterI]));
+                    }
+                    if (RWC[counterI] / Math.Sqrt(SD[counterI]) < RWC[counterI + 1] / Math.Sqrt(SD[counterI + 1]) && RWC[counterI + 1] / Math.Sqrt(SD[counterI + 1]) > 4)
+                    {
+                        mainForm.GammaSpectrChart.Series["Пики"].Points.Add(new SeriesPoint(counterI + 2, mainForm.WorkingSpectr.GammaSpectr[counterI + 1]));
+                    }
+                }
+            }
 
             //Отрисовка
-            //mainForm.DrawFromHandlerProcedure(SavitzkyGolayFirstDerivativeSeries);
             mainForm.DrawFromHandlerProcedure(SavitzkyGolaySmoothingSeries);
         }
     }

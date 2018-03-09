@@ -36,6 +36,8 @@
             DevExpress.XtraCharts.LineSeriesView lineSeriesView2 = new DevExpress.XtraCharts.LineSeriesView();
             DevExpress.XtraCharts.Series series3 = new DevExpress.XtraCharts.Series();
             DevExpress.XtraCharts.LineSeriesView lineSeriesView3 = new DevExpress.XtraCharts.LineSeriesView();
+            DevExpress.XtraCharts.Series series4 = new DevExpress.XtraCharts.Series();
+            DevExpress.XtraCharts.PointSeriesView pointSeriesView1 = new DevExpress.XtraCharts.PointSeriesView();
             this.GammaSpectrRangeControl = new DevExpress.XtraEditors.RangeControl();
             this.GammaSpectrChart = new DevExpress.XtraCharts.ChartControl();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
@@ -55,6 +57,8 @@
             ((System.ComponentModel.ISupportInitialize)(lineSeriesView2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(series3)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(lineSeriesView3)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(series4)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(pointSeriesView1)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -99,10 +103,13 @@
             series2.View = lineSeriesView2;
             series3.Name = "Сглаживание";
             series3.View = lineSeriesView3;
+            series4.Name = "Пики";
+            series4.View = pointSeriesView1;
             this.GammaSpectrChart.SeriesSerializable = new DevExpress.XtraCharts.Series[] {
         series1,
         series2,
-        series3};
+        series3,
+        series4};
             this.GammaSpectrChart.Size = new System.Drawing.Size(826, 463);
             this.GammaSpectrChart.TabIndex = 0;
             // 
@@ -193,6 +200,8 @@
             ((System.ComponentModel.ISupportInitialize)(series2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(lineSeriesView3)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(series3)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(pointSeriesView1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(series4)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.GammaSpectrChart)).EndInit();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
@@ -202,8 +211,6 @@
         }
 
         #endregion
-
-        private DevExpress.XtraCharts.ChartControl GammaSpectrChart;
         private DevExpress.XtraEditors.RangeControl GammaSpectrRangeControl;
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem спектрToolStripMenuItem;
@@ -213,6 +220,7 @@
         private System.Windows.Forms.ToolStripMenuItem BackgroundSettingsMenuButton;
         private System.Windows.Forms.ToolStripMenuItem SpectrometryHandlerMenuButton;
         private System.Windows.Forms.ToolStripMenuItem BackgroundSunstraction;
+        public DevExpress.XtraCharts.ChartControl GammaSpectrChart;
     }
 }
 
