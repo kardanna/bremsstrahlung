@@ -83,8 +83,13 @@ namespace bremsstrahlung
                 Spectr.GammaSpectr[counterI] = double.Parse(Spectr.FileLines[counterI + Spectr.GammaSpectrStartPosition].Replace('.', ','));
                 Spectr.BetaSpectr[counterI] = double.Parse(Spectr.FileLines[counterI + Spectr.BetaSpectrStartPosition].Replace('.', ','));
                 Spectr.Resolution[counterI] = double.Parse(Spectr.FileLines[counterI + Spectr.ResolutionStartPosition].Replace('.', ','));
-                Spectr.Energy[counterI] = double.Parse(Spectr.FileLines[counterI + Spectr.EnergyStartPosition].Replace('.', ','));
+                //Spectr.Energy[counterI] = double.Parse(Spectr.FileLines[counterI + Spectr.EnergyStartPosition].Replace('.', ','));
             }
+            for (int counterI = 0; counterI < 1023; counterI++)
+            {
+                Spectr.Energy[counterI] = double.Parse(Spectr.FileLines[counterI + Spectr.EnergyStartPosition + 1].Replace('.', ','));
+            }
+            Spectr.Energy[1023] = Spectr.Energy[1022];
             ChooseWithOrWithoutBackground();
         }
 
@@ -117,6 +122,7 @@ namespace bremsstrahlung
             {
                 Background.GammaSpectr[counterI] = double.Parse(Background.FileLines[counterI + Background.GammaSpectrStartPosition].Replace('.', ','));
                 Background.BetaSpectr[counterI] = double.Parse(Background.FileLines[counterI + Background.BetaSpectrStartPosition].Replace('.', ','));
+                Background.Energy[counterI] = double.Parse(Background.FileLines[counterI + Background.EnergyStartPosition].Replace('.', ','));
                 Background.Resolution[counterI] = double.Parse(Background.FileLines[counterI + Background.ResolutionStartPosition].Replace('.', ','));
             }
         }
@@ -129,7 +135,7 @@ namespace bremsstrahlung
             for (int counterI = 0; counterI < 1024; counterI++)
             {
                 GammaSpectrChart.Series["Спектр"].Points.Add(new SeriesPoint(counterI + 1, Source.GammaSpectr[counterI]));
-                GammaSpectrChart.Series["Энергия"].Points.Add(new SeriesPoint(counterI + 1, Math.Round(Source.Energy[counterI])));
+                GammaSpectrChart.Series["Энергия"].Points.Add(new SeriesPoint(counterI + 1, Source.Energy[counterI]));//Math.Round(Source.Energy[counterI])));
             }
         }
 

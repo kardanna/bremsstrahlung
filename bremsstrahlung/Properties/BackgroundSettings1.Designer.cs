@@ -39,8 +39,8 @@ namespace bremsstrahlung.Properties {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute(@"<?xml version=""1.0"" encoding=""utf-16""?>
 <ArrayOfString xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xmlns:xsd=""http://www.w3.org/2001/XMLSchema"">
-  <string>D:\Работы\Ядерная физика\Лаб гамма_3\control_background_13_02_2018_COMP1.ats</string>
-  <string>D:\Работы\Ядерная физика\Лаб гамма_3\control_background_13_02_2018_COMP2.ats</string>
+  <string>Backgrounds\control_background_13_02_2018_COMP1.ats</string>
+  <string>Backgrounds\control_background_13_02_2018_COMP2.ats</string>
 </ArrayOfString>")]
         public global::System.Collections.Specialized.StringCollection BackgroundPaths {
             get {
@@ -69,7 +69,7 @@ namespace bremsstrahlung.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("D:\\Работы\\Ядерная физика\\Лаб гамма_3\\control_background_13_02_2018_COMP1.ats")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Backgrounds\\control_background_13_02_2018_COMP1.ats")]
         public string DefaultBackgroundPath {
             get {
                 return ((string)(this["DefaultBackgroundPath"]));

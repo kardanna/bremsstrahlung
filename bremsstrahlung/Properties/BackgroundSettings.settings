@@ -8,8 +8,8 @@
     <Setting Name="BackgroundPaths" Type="System.Collections.Specialized.StringCollection" Scope="User">
       <Value Profile="(Default)">&lt;?xml version="1.0" encoding="utf-16"?&gt;
 &lt;ArrayOfString xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
-  &lt;string&gt;D:\Работы\Ядерная физика\Лаб гамма_3\control_background_13_02_2018_COMP1.ats&lt;/string&gt;
-  &lt;string&gt;D:\Работы\Ядерная физика\Лаб гамма_3\control_background_13_02_2018_COMP2.ats&lt;/string&gt;
+  &lt;string&gt;Backgrounds\control_background_13_02_2018_COMP1.ats&lt;/string&gt;
+  &lt;string&gt;Backgrounds\control_background_13_02_2018_COMP2.ats&lt;/string&gt;
 &lt;/ArrayOfString&gt;</Value>
     </Setting>
     <Setting Name="BackgroundNames" Type="System.Collections.Specialized.StringCollection" Scope="User">
@@ -20,7 +20,7 @@
 &lt;/ArrayOfString&gt;</Value>
     </Setting>
     <Setting Name="DefaultBackgroundPath" Type="System.String" Scope="User">
-      <Value Profile="(Default)">D:\Работы\Ядерная физика\Лаб гамма_3\control_background_13_02_2018_COMP1.ats</Value>
+      <Value Profile="(Default)">Backgrounds\control_background_13_02_2018_COMP1.ats</Value>
     </Setting>
   </Settings>
 </SettingsFile>
