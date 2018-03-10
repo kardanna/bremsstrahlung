@@ -135,11 +135,14 @@ namespace bremsstrahlung
             }
 
             //Поиск пиков
+            XYDiagram GammaSpectrDiagram = (XYDiagram)mainForm.GammaSpectrChart.Diagram;
+            GammaSpectrDiagram.AxisX.ConstantLines.Clear();
             mainForm.GammaSpectrChart.Series["Пики"].Points.Clear();
             for (int counterI = 2; counterI < 950; counterI++)
             {
                 if (SavitzkyGolayFirstDerivativeSeries[counterI - 2] > 0 && SavitzkyGolayFirstDerivativeSeries[counterI - 1] > 0 && SavitzkyGolayFirstDerivativeSeries[counterI] > 0 &&
-                    SavitzkyGolayFirstDerivativeSeries[counterI + 1] < 0 && SavitzkyGolayFirstDerivativeSeries[counterI + 2] < 0 && SavitzkyGolayFirstDerivativeSeries[counterI + 3] < 0)
+                    SavitzkyGolayFirstDerivativeSeries[counterI + 1] < 0 && SavitzkyGolayFirstDerivativeSeries[counterI + 2] < 0 && SavitzkyGolayFirstDerivativeSeries[counterI + 3] < 0 &&
+                    SourceData[counterI] > double.Parse(LowerDetectionThresholdTextBox.Text))
                 {
                     int Range = (int)Math.Round(mainForm.WorkingSpectr.Resolution[counterI] + mainForm.WorkingSpectr.Resolution[counterI]);
                     if (Range % 2 == 0) Range++;
@@ -177,13 +180,20 @@ namespace bremsstrahlung
                         RWC[counterI + 1] -= SourceData[counterJ];
                         SD[counterI + 1] += SourceData[counterJ];
                     }
-                    if (RWC[counterI]/Math.Sqrt(SD[counterI]) > RWC[counterI + 1] / Math.Sqrt(SD[counterI + 1]) && RWC[counterI] / Math.Sqrt(SD[counterI]) > 4)
+                    if (RWC[counterI]/Math.Sqrt(SD[counterI]) > RWC[counterI + 1] / Math.Sqrt(SD[counterI + 1]) && RWC[counterI] / Math.Sqrt(SD[counterI]) > double.Parse(Sensetivity.Text.Replace('.',',')))
                     {
-                        mainForm.GammaSpectrChart.Series["Пики"].Points.Add(new SeriesPoint(counterI + 1, mainForm.WorkingSpectr.GammaSpectr[counterI]));
+                        ConstantLine constantLine = new ConstantLine(Math.Round(mainForm.WorkingSpectr.Energy[counterI],1).ToString() + " кэВ");
+                        GammaSpectrDiagram.AxisX.ConstantLines.Add(constantLine);
+                        constantLine.AxisValue = counterI + 1;
+                        constantLine.Title.Alignment = ConstantLineTitleAlignment.Far;
+
                     }
-                    if (RWC[counterI] / Math.Sqrt(SD[counterI]) < RWC[counterI + 1] / Math.Sqrt(SD[counterI + 1]) && RWC[counterI + 1] / Math.Sqrt(SD[counterI + 1]) > 4)
+                    if (RWC[counterI] / Math.Sqrt(SD[counterI]) < RWC[counterI + 1] / Math.Sqrt(SD[counterI + 1]) && RWC[counterI + 1] / Math.Sqrt(SD[counterI + 1]) > double.Parse(Sensetivity.Text.Replace('.', ',')))
                     {
-                        mainForm.GammaSpectrChart.Series["Пики"].Points.Add(new SeriesPoint(counterI + 2, mainForm.WorkingSpectr.GammaSpectr[counterI + 1]));
+                        ConstantLine constantLine = new ConstantLine(Math.Round(mainForm.WorkingSpectr.Energy[counterI],1).ToString() + " кэВ");
+                        GammaSpectrDiagram.AxisX.ConstantLines.Add(constantLine);
+                        constantLine.AxisValue = counterI + 2;
+                        constantLine.Title.Alignment = ConstantLineTitleAlignment.Far;
                     }
                 }
             }

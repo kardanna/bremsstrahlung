@@ -132,11 +132,18 @@ namespace bremsstrahlung
             GammaSpectrChart.Series["Спектр"].Points.Clear();
             GammaSpectrChart.Series["Энергия"].Points.Clear();
             GammaSpectrChart.Series["Сглаживание"].Points.Clear();
+            GammaSpectrChart.Series["Пики"].Points.Clear();
+            double YAxisMaxValue = 0;
             for (int counterI = 0; counterI < 1024; counterI++)
             {
-                GammaSpectrChart.Series["Спектр"].Points.Add(new SeriesPoint(counterI + 1, Source.GammaSpectr[counterI]));
-                GammaSpectrChart.Series["Энергия"].Points.Add(new SeriesPoint(counterI + 1, Source.Energy[counterI]));//Math.Round(Source.Energy[counterI])));
+                GammaSpectrChart.Series["Спектр"].Points.Add(new SeriesPoint(counterI + 1, Math.Round(Source.GammaSpectr[counterI],2)));
+                GammaSpectrChart.Series["Энергия"].Points.Add(new SeriesPoint(counterI + 1, Math.Round(Source.Energy[counterI],2)));//Math.Round(Source.Energy[counterI])));
+                if (Source.GammaSpectr[counterI] > YAxisMaxValue) YAxisMaxValue = Source.GammaSpectr[counterI];
             }
+            YAxisMaxValue *= 1.1;
+            XYDiagram GammaSpectrDiagram = (XYDiagram)GammaSpectrChart.Diagram;
+            GammaSpectrDiagram.AxisY.WholeRange.MaxValue = YAxisMaxValue;
+            GammaSpectrDiagram.AxisX.ConstantLines.Clear();
         }
 
         private void Form1_SizeChanged(object sender, EventArgs e)

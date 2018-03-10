@@ -35,7 +35,7 @@
             DevExpress.XtraCharts.Series series2 = new DevExpress.XtraCharts.Series();
             DevExpress.XtraCharts.LineSeriesView lineSeriesView2 = new DevExpress.XtraCharts.LineSeriesView();
             DevExpress.XtraCharts.Series series3 = new DevExpress.XtraCharts.Series();
-            DevExpress.XtraCharts.LineSeriesView lineSeriesView3 = new DevExpress.XtraCharts.LineSeriesView();
+            DevExpress.XtraCharts.SplineSeriesView splineSeriesView1 = new DevExpress.XtraCharts.SplineSeriesView();
             DevExpress.XtraCharts.Series series4 = new DevExpress.XtraCharts.Series();
             DevExpress.XtraCharts.PointSeriesView pointSeriesView1 = new DevExpress.XtraCharts.PointSeriesView();
             this.GammaSpectrRangeControl = new DevExpress.XtraEditors.RangeControl();
@@ -56,7 +56,7 @@
             ((System.ComponentModel.ISupportInitialize)(series2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(lineSeriesView2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(series3)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(lineSeriesView3)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(splineSeriesView1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(series4)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(pointSeriesView1)).BeginInit();
             this.menuStrip1.SuspendLayout();
@@ -98,11 +98,23 @@
             this.GammaSpectrChart.Location = new System.Drawing.Point(10, 34);
             this.GammaSpectrChart.Name = "GammaSpectrChart";
             series1.Name = "Спектр";
+            lineSeriesView1.LineStyle.Thickness = 1;
+            lineSeriesView1.RangeControlOptions.ViewType = DevExpress.XtraCharts.RangeControlViewType.Area;
             series1.View = lineSeriesView1;
+            series2.CrosshairHighlightPoints = DevExpress.Utils.DefaultBoolean.False;
+            series2.LabelsVisibility = DevExpress.Utils.DefaultBoolean.False;
             series2.Name = "Энергия";
+            lineSeriesView2.Color = System.Drawing.Color.Transparent;
+            lineSeriesView2.LineMarkerOptions.Color = System.Drawing.Color.Transparent;
+            lineSeriesView2.MarkerVisibility = DevExpress.Utils.DefaultBoolean.False;
+            lineSeriesView2.RangeControlOptions.Visible = false;
             series2.View = lineSeriesView2;
+            series3.CrosshairEnabled = DevExpress.Utils.DefaultBoolean.False;
             series3.Name = "Сглаживание";
-            series3.View = lineSeriesView3;
+            splineSeriesView1.Color = System.Drawing.Color.Crimson;
+            splineSeriesView1.LineStyle.Thickness = 1;
+            splineSeriesView1.RangeControlOptions.Visible = false;
+            series3.View = splineSeriesView1;
             series4.Name = "Пики";
             series4.View = pointSeriesView1;
             this.GammaSpectrChart.SeriesSerializable = new DevExpress.XtraCharts.Series[] {
@@ -198,7 +210,7 @@
             ((System.ComponentModel.ISupportInitialize)(series1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(lineSeriesView2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(series2)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(lineSeriesView3)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(splineSeriesView1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(series3)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(pointSeriesView1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(series4)).EndInit();
