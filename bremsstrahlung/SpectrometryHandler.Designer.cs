@@ -61,14 +61,19 @@
             this.LowerDetectionThresholdTextBox = new System.Windows.Forms.TextBox();
             this.label8 = new System.Windows.Forms.Label();
             this.Sensetivity = new System.Windows.Forms.TextBox();
+            this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.IsChecked = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.Energy = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Channel = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
             // StartHanler
             // 
-            this.StartHanler.Location = new System.Drawing.Point(12, 308);
+            this.StartHanler.Location = new System.Drawing.Point(12, 383);
             this.StartHanler.Name = "StartHanler";
             this.StartHanler.Size = new System.Drawing.Size(340, 23);
             this.StartHanler.TabIndex = 0;
@@ -372,7 +377,7 @@
             this.UseSmoothedData.AutoSize = true;
             this.UseSmoothedData.Checked = true;
             this.UseSmoothedData.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.UseSmoothedData.Location = new System.Drawing.Point(367, 24);
+            this.UseSmoothedData.Location = new System.Drawing.Point(21, 308);
             this.UseSmoothedData.Name = "UseSmoothedData";
             this.UseSmoothedData.Size = new System.Drawing.Size(203, 17);
             this.UseSmoothedData.TabIndex = 4;
@@ -382,7 +387,7 @@
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(364, 50);
+            this.label7.Location = new System.Drawing.Point(18, 334);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(149, 13);
             this.label7.TabIndex = 5;
@@ -390,7 +395,7 @@
             // 
             // LowerDetectionThresholdTextBox
             // 
-            this.LowerDetectionThresholdTextBox.Location = new System.Drawing.Point(519, 47);
+            this.LowerDetectionThresholdTextBox.Location = new System.Drawing.Point(173, 331);
             this.LowerDetectionThresholdTextBox.Name = "LowerDetectionThresholdTextBox";
             this.LowerDetectionThresholdTextBox.Size = new System.Drawing.Size(100, 20);
             this.LowerDetectionThresholdTextBox.TabIndex = 6;
@@ -399,7 +404,7 @@
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(364, 76);
+            this.label8.Location = new System.Drawing.Point(18, 360);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(101, 13);
             this.label8.TabIndex = 7;
@@ -407,17 +412,52 @@
             // 
             // Sensetivity
             // 
-            this.Sensetivity.Location = new System.Drawing.Point(519, 73);
+            this.Sensetivity.Location = new System.Drawing.Point(173, 357);
             this.Sensetivity.Name = "Sensetivity";
             this.Sensetivity.Size = new System.Drawing.Size(100, 20);
             this.Sensetivity.TabIndex = 8;
             this.Sensetivity.Text = "4";
             // 
+            // dataGridView1
+            // 
+            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.IsChecked,
+            this.Energy,
+            this.Channel});
+            this.dataGridView1.Location = new System.Drawing.Point(12, 412);
+            this.dataGridView1.Name = "dataGridView1";
+            this.dataGridView1.RowHeadersVisible = false;
+            this.dataGridView1.Size = new System.Drawing.Size(340, 151);
+            this.dataGridView1.TabIndex = 9;
+            // 
+            // IsChecked
+            // 
+            this.IsChecked.Frozen = true;
+            this.IsChecked.HeaderText = "";
+            this.IsChecked.Name = "IsChecked";
+            this.IsChecked.Width = 25;
+            // 
+            // Energy
+            // 
+            this.Energy.Frozen = true;
+            this.Energy.HeaderText = "Энергия";
+            this.Energy.Name = "Energy";
+            this.Energy.Width = 165;
+            // 
+            // Channel
+            // 
+            this.Channel.Frozen = true;
+            this.Channel.HeaderText = "Канал";
+            this.Channel.Name = "Channel";
+            this.Channel.Width = 160;
+            // 
             // SpectrometryHandler
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(644, 341);
+            this.ClientSize = new System.Drawing.Size(364, 572);
+            this.Controls.Add(this.dataGridView1);
             this.Controls.Add(this.Sensetivity);
             this.Controls.Add(this.label8);
             this.Controls.Add(this.LowerDetectionThresholdTextBox);
@@ -428,13 +468,14 @@
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.StartHanler);
             this.Name = "SpectrometryHandler";
-            this.Text = "SpectrometryHandler";
+            this.Text = "Спектрометрическая обработка";
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -475,5 +516,9 @@
         private System.Windows.Forms.TextBox LowerDetectionThresholdTextBox;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.TextBox Sensetivity;
+        private System.Windows.Forms.DataGridView dataGridView1;
+        private System.Windows.Forms.DataGridViewCheckBoxColumn IsChecked;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Energy;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Channel;
     }
 }

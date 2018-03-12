@@ -42,7 +42,7 @@
             this.BackgroundListBox.FormattingEnabled = true;
             this.BackgroundListBox.Location = new System.Drawing.Point(12, 25);
             this.BackgroundListBox.Name = "BackgroundListBox";
-            this.BackgroundListBox.Size = new System.Drawing.Size(350, 82);
+            this.BackgroundListBox.Size = new System.Drawing.Size(310, 82);
             this.BackgroundListBox.TabIndex = 0;
             // 
             // SetBackground
@@ -89,7 +89,7 @@
             this.AddBackground.Name = "AddBackground";
             this.AddBackground.Size = new System.Drawing.Size(75, 23);
             this.AddBackground.TabIndex = 5;
-            this.AddBackground.Text = "Добавить...";
+            this.AddBackground.Text = "Добавить";
             this.AddBackground.UseVisualStyleBackColor = true;
             this.AddBackground.Click += new System.EventHandler(this.AddBackground_Click);
             // 
@@ -97,9 +97,9 @@
             // 
             this.ResetBackgroundButton.Location = new System.Drawing.Point(255, 113);
             this.ResetBackgroundButton.Name = "ResetBackgroundButton";
-            this.ResetBackgroundButton.Size = new System.Drawing.Size(107, 23);
+            this.ResetBackgroundButton.Size = new System.Drawing.Size(67, 23);
             this.ResetBackgroundButton.TabIndex = 6;
-            this.ResetBackgroundButton.Text = "По умолчанию";
+            this.ResetBackgroundButton.Text = "Сброс";
             this.ResetBackgroundButton.UseVisualStyleBackColor = true;
             this.ResetBackgroundButton.Click += new System.EventHandler(this.ResetBackgroundButton_Click);
             // 
@@ -107,7 +107,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(375, 143);
+            this.ClientSize = new System.Drawing.Size(333, 143);
             this.Controls.Add(this.ResetBackgroundButton);
             this.Controls.Add(this.AddBackground);
             this.Controls.Add(this.DefaultBackgroundLabel);

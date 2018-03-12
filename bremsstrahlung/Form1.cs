@@ -190,7 +190,7 @@ namespace bremsstrahlung
                 openFileDialog.Filter = "АТОМТЕХ Спектр (*.ats)|*.ats";
                 if (openFileDialog.ShowDialog() == DialogResult.OK)
                 {
-                    this.Text = "Bremsstrahlung - " + openFileDialog.SafeFileName;
+                    this.Text = openFileDialog.SafeFileName;
                     Spectr.FileName = openFileDialog.FileName;
                     OpenFileProcedure();
                 }

@@ -137,6 +137,7 @@ namespace bremsstrahlung
             //Поиск пиков
             XYDiagram GammaSpectrDiagram = (XYDiagram)mainForm.GammaSpectrChart.Diagram;
             GammaSpectrDiagram.AxisX.ConstantLines.Clear();
+            dataGridView1.Rows.Clear();
             mainForm.GammaSpectrChart.Series["Пики"].Points.Clear();
             for (int counterI = 2; counterI < 950; counterI++)
             {
@@ -187,16 +188,30 @@ namespace bremsstrahlung
                         constantLine.AxisValue = counterI + 1;
                         constantLine.Title.Alignment = ConstantLineTitleAlignment.Far;
 
+                        DataGridViewRow row = (DataGridViewRow)dataGridView1.Rows[0].Clone();
+                        row.Cells[1].Value = Math.Round(mainForm.WorkingSpectr.Energy[counterI], 1);
+                        row.Cells[2].Value = counterI + 1;
+                        dataGridView1.Rows.Add(row);
+
+
                     }
                     if (RWC[counterI] / Math.Sqrt(SD[counterI]) < RWC[counterI + 1] / Math.Sqrt(SD[counterI + 1]) && RWC[counterI + 1] / Math.Sqrt(SD[counterI + 1]) > double.Parse(Sensetivity.Text.Replace('.', ',')))
                     {
-                        ConstantLine constantLine = new ConstantLine(Math.Round(mainForm.WorkingSpectr.Energy[counterI],1).ToString() + " кэВ");
+                        //Исправил на mainForm.WorkingSpectr.Energy[counterI + 1] на +1
+                        ConstantLine constantLine = new ConstantLine(Math.Round(mainForm.WorkingSpectr.Energy[counterI + 1],1).ToString() + " кэВ");
                         GammaSpectrDiagram.AxisX.ConstantLines.Add(constantLine);
                         constantLine.AxisValue = counterI + 2;
                         constantLine.Title.Alignment = ConstantLineTitleAlignment.Far;
+
+                        DataGridViewRow row = (DataGridViewRow)dataGridView1.Rows[0].Clone();
+                        row.Cells[1].Value = Math.Round(mainForm.WorkingSpectr.Energy[counterI + 1], 1);
+                        row.Cells[2].Value = counterI + 2;
+                        dataGridView1.Rows.Add(row);
                     }
                 }
             }
+
+
 
             //Отрисовка
             mainForm.DrawFromHandlerProcedure(SavitzkyGolaySmoothingSeries);
