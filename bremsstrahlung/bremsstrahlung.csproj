@@ -135,6 +135,9 @@
     <None Include="Backgrounds\control_background_13_02_2018_COMP2.ats">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="COPYING">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Properties\BackgroundSettings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>BackgroundSettings1.Designer.cs</LastGenOutput>

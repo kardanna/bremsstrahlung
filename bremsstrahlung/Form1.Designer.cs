@@ -38,6 +38,10 @@
             DevExpress.XtraCharts.SplineSeriesView splineSeriesView1 = new DevExpress.XtraCharts.SplineSeriesView();
             DevExpress.XtraCharts.Series series4 = new DevExpress.XtraCharts.Series();
             DevExpress.XtraCharts.PointSeriesView pointSeriesView1 = new DevExpress.XtraCharts.PointSeriesView();
+            DevExpress.XtraCharts.Series series5 = new DevExpress.XtraCharts.Series();
+            DevExpress.XtraCharts.SplineSeriesView splineSeriesView2 = new DevExpress.XtraCharts.SplineSeriesView();
+            DevExpress.XtraCharts.Series series6 = new DevExpress.XtraCharts.Series();
+            DevExpress.XtraCharts.SplineSeriesView splineSeriesView3 = new DevExpress.XtraCharts.SplineSeriesView();
             this.GammaSpectrRangeControl = new DevExpress.XtraEditors.RangeControl();
             this.GammaSpectrChart = new DevExpress.XtraCharts.ChartControl();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
@@ -59,6 +63,10 @@
             ((System.ComponentModel.ISupportInitialize)(splineSeriesView1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(series4)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(pointSeriesView1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(series5)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(splineSeriesView2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(series6)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(splineSeriesView3)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -117,11 +125,19 @@
             series3.View = splineSeriesView1;
             series4.Name = "Пики";
             series4.View = pointSeriesView1;
+            series5.CrosshairEnabled = DevExpress.Utils.DefaultBoolean.False;
+            series5.Name = "Пр1";
+            series5.View = splineSeriesView2;
+            series6.CrosshairEnabled = DevExpress.Utils.DefaultBoolean.False;
+            series6.Name = "Пр2";
+            series6.View = splineSeriesView3;
             this.GammaSpectrChart.SeriesSerializable = new DevExpress.XtraCharts.Series[] {
         series1,
         series2,
         series3,
-        series4};
+        series4,
+        series5,
+        series6};
             this.GammaSpectrChart.Size = new System.Drawing.Size(826, 463);
             this.GammaSpectrChart.TabIndex = 0;
             // 
@@ -202,6 +218,7 @@
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "Form1";
+            this.Text = "Bremsstrahlung";
             this.SizeChanged += new System.EventHandler(this.Form1_SizeChanged);
             ((System.ComponentModel.ISupportInitialize)(this.GammaSpectrRangeControl)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(xyDiagram1)).EndInit();
@@ -213,6 +230,10 @@
             ((System.ComponentModel.ISupportInitialize)(series3)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(pointSeriesView1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(series4)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(splineSeriesView2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(series5)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(splineSeriesView3)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(series6)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.GammaSpectrChart)).EndInit();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
