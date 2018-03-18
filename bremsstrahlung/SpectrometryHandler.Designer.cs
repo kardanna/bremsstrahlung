@@ -416,7 +416,7 @@
             this.Sensetivity.Name = "Sensetivity";
             this.Sensetivity.Size = new System.Drawing.Size(100, 20);
             this.Sensetivity.TabIndex = 8;
-            this.Sensetivity.Text = "4";
+            this.Sensetivity.Text = "10";
             // 
             // dataGridView1
             // 

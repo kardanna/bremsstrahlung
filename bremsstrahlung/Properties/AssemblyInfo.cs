@@ -1,5 +1,6 @@
-﻿//     Copyright 2018 (C), Mirgorod Yuri
-//     
+﻿//     Copyright 2018 ©, Yuri S. Mirgorod, Svetlana M. Kachan, Yana A. Salkevich
+//     All rights reserved.
+// 
 //     This file is part of Bremsstahlung.
 // 
 //     Bremsstahlung is free software: you can redistribute it and/or modify
