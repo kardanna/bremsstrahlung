@@ -83,7 +83,8 @@ namespace bremsstrahlung
         {
             if (Properties.BackgroundSettings.Default.DefaultBackgroundName.ToString() == BackgroundListBox.SelectedItem.ToString())
             {
-                MessageBox.Show("Невозможно удалить фон по умолчанию");
+                MessageBox.Show("Попытка удалить фон по умолчанию!",
+                        "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             else
             {

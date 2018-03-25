@@ -35,14 +35,27 @@ namespace bremsstrahlung
         {
             InitializeComponent();
         }
+        
+        public void ClearAllSeries()
+        {
+            Form1 mainForm = this.Owner as Form1;
+            XYDiagram GammaSpectrDiagram = (XYDiagram)mainForm.GammaSpectrChart.Diagram;
+            mainForm.GammaSpectrChart.Series["Пр1"].Points.Clear();
+            mainForm.GammaSpectrChart.Series["Пр2"].Points.Clear();
+            mainForm.GammaSpectrChart.Series["baseline"].Points.Clear();
+            mainForm.GammaSpectrChart.Series["edges"].Points.Clear();
+            mainForm.GammaSpectrChart.Series["edges2"].Points.Clear();
+            GammaSpectrDiagram.AxisX.ConstantLines.Clear();
+            dataGridView1.Rows.Clear();
+        }
 
         private void StartHanler_Click(object sender, EventArgs e)
         {
-
             Form1 mainForm = this.Owner as Form1;
+            XYDiagram GammaSpectrDiagram = (XYDiagram)mainForm.GammaSpectrChart.Diagram;
 
-            mainForm.GammaSpectrChart.Series["Пр1"].Points.Clear();
-            mainForm.GammaSpectrChart.Series["Пр2"].Points.Clear();
+            //Очистка графика
+            ClearAllSeries();
 
             int SmoothingWindowWidth = 1,
                 FirstDerivativeWindowWidth = 1,
@@ -50,14 +63,22 @@ namespace bremsstrahlung
                 SmoothingPolynomialType = 1,
                 FirstDerivativePolynomialType = 1,
                 SecondDerivativePolynomialType = 1;
-            double  SmoothingNormalisation = 1,
+            double SmoothingNormalisation = 1,
                     FirstDerivativeNormalisation = 1,
                     SecondDerivativeNormalisation = 1;
-            double[,] SavitzkyGolaySmoothing = new double[,] {          { 0, 0, -3, 12, 17, 12, -3, 0, 0 },
-                                                                        { 0, -2, 3, 6, 7, 6, 3, -2, 0 },
-                                                                        { -21, 14, 39, 54, 59, 54, 39, 14, -21 },
-                                                                        { 0, 5, -30, 75, 131, 75, -30, 5, 0 },
-                                                                        { 15, -55, 30, 135, 179, 135, 30, -55, 15 } };
+            double[,] SavitzkyGolaySmoothing = new double[,] {          { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -3, 12, 17, 12, -3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+                                                                        { 0, 0, 0, 0, 0, 0, 0, 0, 0, -2, 3, 6, 7, 6, 3, -2, 0 , 0, 0, 0, 0, 0, 0, 0, 0 },
+                                                                        { 0, 0, 0, 0, 0, 0, 0, 0, -21, 14, 39, 54, 59, 54, 39, 14, -21, 0, 0, 0, 0, 0, 0, 0, 0 },
+                                                                        { 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, -30, 75, 131, 75, -30, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+                                                                        { 0, 0, 0, 0, 0, 0, 0, 0, 15, -55, 30, 135, 179, 135, 30, -55, 15, 0, 0, 0, 0, 0, 0, 0, 0 },
+                                                                /**/    { 0, 0, 0, 0, 0, 0, 0, -36, 9, 44, 69, 84, 89, 84, 67, 44, 9, -36, 0, 0, 0, 0, 0, 0, 0 },
+                                                                        { 0, 0, 0, 0, 0, 0, -11, 0, 9, 16, 21, 24, 25, 24, 21, 16, 9 , 0, -11, 0, 0, 0, 0, 0, 0 },
+                                                                        { 0, 0, 0, 0, 0, -78, -13, 42, 87, 122, 147, 162, 167, 162, 147, 122, 87, 42, -13, -78, 0, 0, 0, 0, 0 },
+                                                                        { 0, 0, 0, 0, -21, -6, 7, 18, 27, 32, 39, 42, 43, 42, 39, 34, 27, 18, 7, -6, -21, 0, 0, 0, 0 },
+                                                                        { 0, 0, 0, -136, -51, 24, 89, 144, 189, 224, 249, 264, 269, 264, 249, 224, 189, 144, 89, 24, -51, -136, 0, 0, 0 },
+                                                                        { 0, 0, -171, -76, 9, 84, 149, 204, 249, 284, 309, 324, 329, 324, 309, 284, 249, 204, 149, 84, 9, -76, -171, 0, 0 },
+                                                                        { 0, -42, -21, -2, 15, 30, 43, 54, 63, 70, 75, 78, 79, 78, 75, 70, 63, 54, 43, 30, 15, -2, -21, -42, 0 },
+                                                                        { -253, -138, -33, 62, 147, 222, 287, 343, 387, 422, 447, 462, 467, 462, 447, 422, 387, 343, 287, 222, 147, 62, -33, -138, -253 }};
             double[,] SavitzkyGolayFirstDerivative = new double[,] {    { 0, 0, 0, -1, 0, 1, 0, 0, 0 },
                                                                         { 0, 0, -2, -1, 0, 1, 2, 0, 0 },
                                                                         { 0, -3, -2, -1, 0, 1, 2, 3, 0 },
@@ -77,6 +98,14 @@ namespace bremsstrahlung
             if (radioButton3.Checked == true) { SmoothingWindowWidth = 9; SmoothingNormalisation = 231; SmoothingPolynomialType = 2; }
             if (radioButton4.Checked == true) { SmoothingWindowWidth = 7; SmoothingNormalisation = 231; SmoothingPolynomialType = 3; }
             if (radioButton5.Checked == true) { SmoothingWindowWidth = 9; SmoothingNormalisation = 429; SmoothingPolynomialType = 4; }
+            if (radioButton19.Checked == true) { SmoothingWindowWidth = 11; SmoothingNormalisation = 429; SmoothingPolynomialType = 5; }
+            if (radioButton20.Checked == true) { SmoothingWindowWidth = 13; SmoothingNormalisation = 143; SmoothingPolynomialType = 6; }
+            if (radioButton21.Checked == true) { SmoothingWindowWidth = 15; SmoothingNormalisation = 1105; SmoothingPolynomialType = 7; }
+            if (radioButton22.Checked == true) { SmoothingWindowWidth = 17; SmoothingNormalisation = 323; SmoothingPolynomialType = 8; }
+            if (radioButton23.Checked == true) { SmoothingWindowWidth = 19; SmoothingNormalisation = 2261; SmoothingPolynomialType = 9; }
+            if (radioButton24.Checked == true) { SmoothingWindowWidth = 21; SmoothingNormalisation = 3059; SmoothingPolynomialType = 10; }
+            if (radioButton25.Checked == true) { SmoothingWindowWidth = 23; SmoothingNormalisation = 805; SmoothingPolynomialType = 11; }
+            if (radioButton26.Checked == true) { SmoothingWindowWidth = 25; SmoothingNormalisation = 5175; SmoothingPolynomialType = 12; }
 
             if (radioButton6.Checked == true) { FirstDerivativeWindowWidth = 3; FirstDerivativeNormalisation = 2; FirstDerivativePolynomialType = 0; }
             if (radioButton7.Checked == true) { FirstDerivativeWindowWidth = 5; FirstDerivativeNormalisation = 10; FirstDerivativePolynomialType = 1; }
@@ -94,6 +123,7 @@ namespace bremsstrahlung
             if (radioButton18.Checked == true) { SecondDerivativeWindowWidth = 9; SecondDerivativeNormalisation = 1716; SecondDerivativePolynomialType = 5; }
 
             double[] SavitzkyGolaySmoothingSeries = new double[1024];
+            double[] SavitzkyGolaySmoothingBaseline = new double[1024];
             double[] SavitzkyGolayFirstDerivativeSeries = new double[1024];
             double[] SavitzkyGolaySecondDerivativeSeries = new double[1024];
             double[] SourceData = new double[1024];
@@ -111,10 +141,38 @@ namespace bremsstrahlung
                 SavitzkyGolaySmoothingSeries[counterI] = 0;
                 for (int counterJ = counterI - (SmoothingWindowWidth - 1) / 2; counterJ <= counterI + (SmoothingWindowWidth - 1) / 2; counterJ++)
                 {
-                    SavitzkyGolaySmoothingSeries[counterI] += (mainForm.WorkingSpectr.GammaSpectr[counterJ] * SavitzkyGolaySmoothing[SmoothingPolynomialType, 4 + counterJ - counterI]) / SmoothingNormalisation;
+                    SavitzkyGolaySmoothingSeries[counterI] += (mainForm.WorkingSpectr.GammaSpectr[counterJ] * SavitzkyGolaySmoothing[SmoothingPolynomialType, 12 + counterJ - counterI]) / SmoothingNormalisation;
                 }
             }
-            
+
+            if (radioButton39.Checked == true) { SmoothingWindowWidth = 5; SmoothingNormalisation = 35; SmoothingPolynomialType = 0; }
+            if (radioButton38.Checked == true) { SmoothingWindowWidth = 7; SmoothingNormalisation = 21; SmoothingPolynomialType = 1; }
+            if (radioButton37.Checked == true) { SmoothingWindowWidth = 9; SmoothingNormalisation = 231; SmoothingPolynomialType = 2; }
+            if (radioButton36.Checked == true) { SmoothingWindowWidth = 7; SmoothingNormalisation = 231; SmoothingPolynomialType = 3; }
+            if (radioButton35.Checked == true) { SmoothingWindowWidth = 9; SmoothingNormalisation = 429; SmoothingPolynomialType = 4; }
+            if (radioButton34.Checked == true) { SmoothingWindowWidth = 11; SmoothingNormalisation = 429; SmoothingPolynomialType = 5; }
+            if (radioButton33.Checked == true) { SmoothingWindowWidth = 13; SmoothingNormalisation = 143; SmoothingPolynomialType = 6; }
+            if (radioButton32.Checked == true) { SmoothingWindowWidth = 15; SmoothingNormalisation = 1105; SmoothingPolynomialType = 7; }
+            if (radioButton31.Checked == true) { SmoothingWindowWidth = 17; SmoothingNormalisation = 323; SmoothingPolynomialType = 8; }
+            if (radioButton30.Checked == true) { SmoothingWindowWidth = 19; SmoothingNormalisation = 2261; SmoothingPolynomialType = 9; }
+            if (radioButton29.Checked == true) { SmoothingWindowWidth = 21; SmoothingNormalisation = 3059; SmoothingPolynomialType = 10; }
+            if (radioButton28.Checked == true) { SmoothingWindowWidth = 23; SmoothingNormalisation = 805; SmoothingPolynomialType = 11; }
+            if (radioButton27.Checked == true) { SmoothingWindowWidth = 25; SmoothingNormalisation = 5175; SmoothingPolynomialType = 12; }
+
+            for (int counterI = 0; counterI < (SmoothingWindowWidth - 1) / 2; counterI++)
+            {
+                SavitzkyGolaySmoothingBaseline[counterI] = mainForm.WorkingSpectr.GammaSpectr[counterI];
+                SavitzkyGolaySmoothingBaseline[counterI + 1024 - (SmoothingWindowWidth - 1) / 2] = mainForm.WorkingSpectr.GammaSpectr[counterI + 1024 - (SmoothingWindowWidth - 1) / 2];
+            }
+            for (int counterI = (SmoothingWindowWidth - 1) / 2; counterI < 1024 - (SmoothingWindowWidth - 1) / 2; counterI++)
+            {
+                SavitzkyGolaySmoothingBaseline[counterI] = 0;
+                for (int counterJ = counterI - (SmoothingWindowWidth - 1) / 2; counterJ <= counterI + (SmoothingWindowWidth - 1) / 2; counterJ++)
+                {
+                    SavitzkyGolaySmoothingBaseline[counterI] += (mainForm.WorkingSpectr.GammaSpectr[counterJ] * SavitzkyGolaySmoothing[SmoothingPolynomialType, 12 + counterJ - counterI]) / SmoothingNormalisation;
+                }
+            }
+
             //Использовать ли сглаженные данные для нахождения первой и второй производной
             if (UseSmoothedData.Checked == true)
             {
@@ -156,18 +214,8 @@ namespace bremsstrahlung
             }
 
             //Поиск пиков
-
             //Номер обрабатываемого пика
-            int Peak = 1;
-            //Очистка графика
-            mainForm.GammaSpectrChart.Series["cunt"].Points.Clear();
-            XYDiagram GammaSpectrDiagram = (XYDiagram)mainForm.GammaSpectrChart.Diagram;
-            GammaSpectrDiagram.AxisX.ConstantLines.Clear();
-            dataGridView1.Rows.Clear();
-            mainForm.GammaSpectrChart.Series["Пики"].Points.Clear();
-            mainForm.GammaSpectrChart.Series["baseline"].Points.Clear();
-            mainForm.GammaSpectrChart.Series["edges"].Points.Clear();
-            mainForm.GammaSpectrChart.Series["edges2"].Points.Clear();
+            int Peak = 1;            
 
             //Массивы для поиска границ пиков
             int[] EdgesNumbers = new int[1024];
@@ -175,7 +223,7 @@ namespace bremsstrahlung
             int NumberOfEdges = 1;
 
             //Цикл поиска пиков. Верхняя граница ограничена значением 1,5*ПШПВ из-за возможности
-            //выхода за границу массива при нахождении RWC
+            //выхода за границу массива при нахождении RWC. ПОИСК ПИКОВ ВОСЛЕ 950 КАНАЛА НЕ ПРОИЗВОДИТСЯ
             for (int counterI = 2; counterI < 950; counterI++)
             {
                 //Проверка смены знака производной в районе 6 каналов и наличия необходимого
@@ -331,60 +379,119 @@ namespace bremsstrahlung
                 }
             }
 
-            //Отрисовка массива с флагами
-            for (int i = 0; i < 1024; i++)
-            {
-                mainForm.GammaSpectrChart.Series["cunt"].Points.Add(new SeriesPoint(i + 1, PeaksFlags[i]*500));
-            }
 
-            double[] ContinuumX = new double[1024];
-            double[] ContinuumY = new double[1024];
-            double[] PeaksX = new double[1024];
-            double[] PeaksY = new double[1024];
-            int ContinuumCounter = 0,
-                PeaksCounter = 0;
+            //Вычисление базовой линии
             double[] Baseline = new double[1024];
-            
-            for (int counterI = 0; counterI < 1024; counterI++)
+            if (checkBox1.Checked)
             {
-                if (PeaksFlags[counterI] == -1)
+                //BAD QUINTANA
+                //НЕСООТВЕТСВТУЮТ ГРАНИЦЫ ПИКОВ И ЧИСЛО ИМПУЛЬСОВ В НИХ: СТОЯТ ЗАЧЕНИЯ НА ОДИН КАНАЛ ПОСЛЕ                
+                double[] cX = new double[NumberOfEdges];
+                double[] cY = new double[NumberOfEdges];
+                for (int i = 0; i < NumberOfEdges; i++)
                 {
-                    ContinuumX[ContinuumCounter] = counterI;
-                    ContinuumY[ContinuumCounter] = SavitzkyGolaySmoothingSeries[counterI];
-                    ContinuumCounter++;
+                    cX[i] = EdgesNumbers[i];
+                    cY[i] = mainForm.WorkingSpectr.GammaSpectr[(int)cX[i]];
                 }
+
+                int finish = 0;
+                while (finish != 1)
+                {
+                    finish = 1;
+                    mainForm.GammaSpectrChart.Series["baseline"].Points.Clear();
+                    for (int i = 0; i < 1024; i++)
+                    {
+                        Baseline[i] = Interpolate.CubicSplineRobust(cX, cY).Interpolate(i);
+                    }                    
+                    for (int i = 0; i < NumberOfEdges - 1; i++)
+                    {
+                        double  R = 0,
+                                S = 0;
+                        if (PeaksFlags[(int)cX[i] + 1] == 1) continue;
+                        for (int j = (int)cX[i] + 1; j < (int)cX[i + 1]; j++)
+                        {
+                            R += Math.Abs((mainForm.WorkingSpectr.GammaSpectr[j - 1] - Baseline[j - 1]) / Math.Sqrt(Math.Abs(mainForm.WorkingSpectr.GammaSpectr[j - 1])) *
+                                (mainForm.WorkingSpectr.GammaSpectr[j] - Baseline[j]) / Math.Sqrt(Math.Abs(mainForm.WorkingSpectr.GammaSpectr[j])));
+                            S += Math.Pow(mainForm.WorkingSpectr.GammaSpectr[j] - Baseline[j], 2);
+                        }
+                        if ((cX[i + 1] - cX[i]) * R / S > double.Parse(textBox1.Text.Replace('.', ',')))
+                        {
+                            
+                            List<double> lst = cX.OfType<double>().ToList();
+                            lst.Insert(i + 1, Math.Round((cX[i + 1] + cX[i]) / 2));
+                            Array.Resize(ref cX, cX.Length + 1);
+                            cX = lst.ToArray();
+                            List<double> lst2 = cY.OfType<double>().ToList();
+                            lst2.Insert(i + 1, mainForm.WorkingSpectr.GammaSpectr[(int)Math.Round((cX[i + 1] + cX[i]) / 2)]);
+                            Array.Resize(ref cY, cY.Length + 1);
+                            cY = lst2.ToArray();
+                            NumberOfEdges++;
+                            finish = 0;
+                        }
+                    }
+                }
+                for (int counterI = 0; counterI < 1024; counterI++)
+                {
+                    if (PeaksFlags[counterI] == 1)
+                    {
+                        Baseline[counterI] = Interpolate.CubicSplineRobust(cX, cY).Interpolate(counterI);
+                    }
+                    else
+                    {
+                        Baseline[counterI] = mainForm.WorkingSpectr.GammaSpectr[counterI];
+                    }
+                    mainForm.GammaSpectrChart.Series["baseline"].Points.Add(new SeriesPoint(counterI + 1, Baseline[counterI]));
+                }
+            }
+            else
+            {     
+                //ВЫШЛО ЛУЧШЕ
+                double[] ContinuumX = new double[1024];
+                double[] ContinuumY = new double[1024];
+                double[] PeaksX = new double[1024];
+                double[] PeaksY = new double[1024];
+                int ContinuumCounter = 0,
+                    PeaksCounter = 0;
+                PeaksFlags[0] = -1;
+                for (int counterI = 0; counterI < 1024; counterI++)
+                {
+                    if (PeaksFlags[counterI] == -1)
+                    {
+                        ContinuumX[ContinuumCounter] = counterI;
+                        ContinuumY[ContinuumCounter] = SavitzkyGolaySmoothingBaseline[counterI];
+                        ContinuumCounter++;
+                    }
                 else
+                    {
+                        PeaksX[PeaksCounter] = counterI;
+                        PeaksY[PeaksCounter] = mainForm.WorkingSpectr.GammaSpectr[counterI];
+                        PeaksCounter++;
+                    }
+                }                
+                double[] cX = new double[ContinuumCounter];
+                double[] cY = new double[ContinuumCounter];
+                for (int i = 0; i < ContinuumCounter; i++)
                 {
-                    PeaksX[PeaksCounter] = counterI;
-                    PeaksY[PeaksCounter] = mainForm.WorkingSpectr.GammaSpectr[counterI];
-                    PeaksCounter++;
+                    cX[i] = ContinuumX[i];
+                    cY[i] = ContinuumY[i];
                 }
-            }
-            double[] cX = new double[ContinuumCounter];
-            double[] cY = new double[ContinuumCounter];
-            for (int i = 0; i < ContinuumCounter; i++)
-            {
-                cX[i] = ContinuumX[i];
-                cY[i] = ContinuumY[i];
+
+                for (int counterI = 0; counterI < 1024; counterI++)
+                {
+                    if (PeaksFlags[counterI] == 1)
+                    {
+                        Baseline[counterI] = Interpolate.CubicSplineRobust(cX, cY).Interpolate(counterI);
+                    }
+                    else
+                    {
+                        Baseline[counterI] = mainForm.WorkingSpectr.GammaSpectr[counterI];
+                    }
+                    mainForm.GammaSpectrChart.Series["baseline"].Points.Add(new SeriesPoint(counterI + 1, Baseline[counterI]));
+                }                
             }
             
-            for (int counterI = 0; counterI < 1024; counterI++)
-            {
-                if (PeaksFlags[counterI] == 1)
-                {
-                    Baseline[counterI] = Interpolate.CubicSpline(cX, cY).Interpolate(counterI);
-                }
-                else
-                {
-                    Baseline[counterI] = mainForm.WorkingSpectr.GammaSpectr[counterI];
-                }
-                mainForm.GammaSpectrChart.Series["baseline"].Points.Add(new SeriesPoint(counterI + 1, Baseline[counterI]));
-            }
-            double[] x = new double[3] { -1, 0, 3 };
-            double[] y = new double[3] { 0.5, 0, 3 };
-            this.Text += Interpolate.CubicSpline(x, y).Interpolate(2);
             //Отрисовка сглаженного спектра, певой и второй производной
-            mainForm.DrawFromHandlerProcedure(SavitzkyGolaySmoothingSeries,SavitzkyGolayFirstDerivativeSeries,SavitzkyGolaySecondDerivativeSeries);
+            mainForm.DrawFromHandlerProcedure(SavitzkyGolaySmoothingSeries);
         }
     }
 }

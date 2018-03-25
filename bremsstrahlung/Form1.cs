@@ -41,9 +41,6 @@ namespace bremsstrahlung
             GammaSpectrRangeControl.Top = 44 + GammaSpectrChart.Height;
             GammaSpectrRangeControl.Left = 10;
             GammaSpectrRangeControl.Width = GammaSpectrChart.Width;
-            //Настройка увеличения спектра
-            XYDiagram GammaSpectrDiagram = (XYDiagram)GammaSpectrChart.Diagram;
-            GammaSpectrDiagram.EnableAxisXZooming = true;
             //Чтение фона
             SetBackgroundProcedure();
         }
@@ -100,14 +97,34 @@ namespace bremsstrahlung
                 Spectr.GammaSpectr[counterI] = double.Parse(Spectr.FileLines[counterI + Spectr.GammaSpectrStartPosition].Replace('.', ','));
                 Spectr.BetaSpectr[counterI] = double.Parse(Spectr.FileLines[counterI + Spectr.BetaSpectrStartPosition].Replace('.', ','));
                 Spectr.Resolution[counterI] = double.Parse(Spectr.FileLines[counterI + Spectr.ResolutionStartPosition].Replace('.', ','));
-                //Spectr.Energy[counterI] = double.Parse(Spectr.FileLines[counterI + Spectr.EnergyStartPosition].Replace('.', ','));
+                Spectr.Energy[counterI] = double.Parse(Spectr.FileLines[counterI + Spectr.EnergyStartPosition].Replace('.', ','));
             }
+            for (int counterI = 0; counterI < 1024; counterI++)
+            {
+                if (Background.Energy[counterI] != Spectr.Energy[counterI])
+                {
+                    MessageBox.Show("Энергетическая калибровка спектра не совпадает с энергетической калибровкой фона. Проверьте правильность устновленного фона",
+                        "Внимание", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    break;
+                }
+            }
+            //Сдвиг массива энергий на 1 влево
             for (int counterI = 0; counterI < 1023; counterI++)
             {
                 Spectr.Energy[counterI] = double.Parse(Spectr.FileLines[counterI + Spectr.EnergyStartPosition + 1].Replace('.', ','));
             }
             Spectr.Energy[1023] = Spectr.Energy[1022];
             ChooseWithOrWithoutBackground();
+        }
+
+        public void ClearAllSeriesProcedure()
+        {
+            XYDiagram GammaSpectrDiagram = (XYDiagram)GammaSpectrChart.Diagram;
+            GammaSpectrChart.Series["Спектр"].Points.Clear();
+            GammaSpectrChart.Series["Энергия"].Points.Clear();
+            GammaSpectrChart.Series["Сглаживание"].Points.Clear();
+            GammaSpectrChart.Series["baseline"].Points.Clear();
+            GammaSpectrDiagram.AxisX.ConstantLines.Clear();
         }
 
         void ChooseWithOrWithoutBackground()
@@ -146,21 +163,12 @@ namespace bremsstrahlung
 
         void DrawChartProcedure(SpectrFile Source)
         {
-            GammaSpectrChart.Series["Спектр"].Points.Clear();
-            GammaSpectrChart.Series["Энергия"].Points.Clear();
-            GammaSpectrChart.Series["Сглаживание"].Points.Clear();
-            GammaSpectrChart.Series["Пики"].Points.Clear();
-            double YAxisMaxValue = 0;
+            ClearAllSeriesProcedure();
             for (int counterI = 0; counterI < 1024; counterI++)
             {
                 GammaSpectrChart.Series["Спектр"].Points.Add(new SeriesPoint(counterI + 1, Math.Round(Source.GammaSpectr[counterI],2)));
                 GammaSpectrChart.Series["Энергия"].Points.Add(new SeriesPoint(counterI + 1, Math.Round(Source.Energy[counterI],2)));//Math.Round(Source.Energy[counterI])));
-                if (Source.GammaSpectr[counterI] > YAxisMaxValue) YAxisMaxValue = Source.GammaSpectr[counterI];
             }
-            YAxisMaxValue *= 1.1;
-            XYDiagram GammaSpectrDiagram = (XYDiagram)GammaSpectrChart.Diagram;
-            GammaSpectrDiagram.AxisY.WholeRange.MaxValue = YAxisMaxValue;
-            GammaSpectrDiagram.AxisX.ConstantLines.Clear();
         }
 
         private void Form1_SizeChanged(object sender, EventArgs e)
@@ -214,24 +222,72 @@ namespace bremsstrahlung
             }
         }
 
-        public void DrawFromHandlerProcedure(double[] SmoothingSource1, double[] SmoothingSource2, double[] SmoothingSource3)
+        public void DrawFromHandlerProcedure(double[] SmoothingSource)
         {
             GammaSpectrChart.Series["Сглаживание"].Points.Clear();
             for (int counterI = 0; counterI < 1024; counterI++)
             {
-                GammaSpectrChart.Series["Сглаживание"].Points.Add(new SeriesPoint(counterI + 1, SmoothingSource1[counterI]));
-                GammaSpectrChart.Series["Пр1"].Points.Add(new SeriesPoint(counterI + 1, SmoothingSource2[counterI]));
-                GammaSpectrChart.Series["Пр2"].Points.Add(new SeriesPoint(counterI + 1, SmoothingSource3[counterI]));
+                GammaSpectrChart.Series["Сглаживание"].Points.Add(new SeriesPoint(counterI + 1, SmoothingSource[counterI]));
             }
         }
 
-        /*
-        private void GammaSpectrChart_CustomDrawCrosshair(object sender, CustomDrawCrosshairEventArgs e)
+        private void XAxisZoomingMenuItem_Click(object sender, EventArgs e)
         {
-            if (e.CrosshairGroupHeaderElements.Count() > 0)
+            XYDiagram GammaSpectrDiagram = (XYDiagram)GammaSpectrChart.Diagram;
+            if (XAxisZoomingMenuItem.Checked == true)
             {
-                e.CrosshairGroupHeaderElements.First().Text = "Канал " + e.CrosshairGroupHeaderElements.First().SeriesPoints.First().Argument;
+                XAxisZoomingMenuItem.Checked = false;
+                GammaSpectrDiagram.EnableAxisXZooming = false;
+                XAxisZoomingMenuItem.Image = bremsstrahlung.Properties.Resources.Zoom_16x;
             }
-        }*/
+            else
+            {
+                XAxisZoomingMenuItem.Checked = true;
+                GammaSpectrDiagram.EnableAxisXZooming = true;
+                XAxisZoomingMenuItem.Image = bremsstrahlung.Properties.Resources.ZoomIn_16x;
+            }
+        }
+
+        private void YAxisZoomingMenuItem_Click(object sender, EventArgs e)
+        {
+            XYDiagram GammaSpectrDiagram = (XYDiagram)GammaSpectrChart.Diagram;
+            if (YAxisZoomingMenuItem.Checked == true)
+            {
+                YAxisZoomingMenuItem.Checked = false;
+                GammaSpectrDiagram.EnableAxisYZooming = false;
+                YAxisZoomingMenuItem.Image = bremsstrahlung.Properties.Resources.Zoom_16x;
+            }
+            else
+            {
+                YAxisZoomingMenuItem.Checked = true;
+                GammaSpectrDiagram.EnableAxisYZooming = true;
+                YAxisZoomingMenuItem.Image = bremsstrahlung.Properties.Resources.ZoomIn_16x;
+            }
+        }
+
+        private void PrintMenuItem_Click(object sender, EventArgs e)
+        {
+            if (!GammaSpectrChart.IsPrintingAvailable)
+            {
+                MessageBox.Show("Библиотека \"DevExpress.XtraPrinting.v7.2.dll\" не обнаружена!", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            GammaSpectrChart.Print();
+        }
+
+        private void PrintPreviewMenuItem_Click(object sender, EventArgs e)
+        {
+            if (!GammaSpectrChart.IsPrintingAvailable)
+            {
+                MessageBox.Show("Библиотека \"DevExpress.XtraPrinting.v7.2.dll\" не обнаружена!", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            GammaSpectrChart.ShowPrintPreview();
+        }
+
+        private void CloseMenuItem_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
+        }
     }
 }
