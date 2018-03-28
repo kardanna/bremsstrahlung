@@ -24,6 +24,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using DevExpress.XtraCharts;
 
 namespace bremsstrahlung
 {
@@ -32,74 +33,71 @@ namespace bremsstrahlung
         public BackgroundSettings()
         {
             InitializeComponent();
-            RefreshBackgroundList();
-            //Properties.BackgroundSettings.Default.Reset();
+            BackgroundChart.Height = this.ClientSize.Height - 47;
+            BackgroundChart.Width = this.ClientSize.Width - 20;
+            ShowBackground();
         }
 
-        void RefreshBackgroundList()
+        public class BackgroundFile
         {
-            BackgroundListBox.Items.Clear();
-            for (int counterI = 0; counterI < (int)Properties.BackgroundSettings.Default.BackgroundNames.Count; counterI++)
-            {
-                BackgroundListBox.Items.Add(Properties.BackgroundSettings.Default.BackgroundNames[counterI]);
-            }
-            DefaultBackgroundLabel.Text = Properties.BackgroundSettings.Default.DefaultBackgroundName;
+            public string[] FileLines { get; set; }
+            public int Time { get; set; }
+            public int Geometry { get; set; }
+            public int GammaSpectrStartPosition { get; set; }
+            public int EnergyStartPosition { get; set; }
+            public double[] GammaSpectr = new double[1024];
+            public double[] Energy = new double[1024];
         }
 
-        private void SetBackground_Click(object sender, EventArgs e)
+        BackgroundFile Background = new BackgroundFile();
+
+        void ClearChart()
         {
-            if (BackgroundListBox.SelectedIndex == -1)
-            {
-                MessageBox.Show("Фон не выбран");
-            }
-            else
-            {
-                Properties.BackgroundSettings.Default.DefaultBackgroundName = Properties.BackgroundSettings.Default.BackgroundNames[BackgroundListBox.SelectedIndex];
-                Properties.BackgroundSettings.Default.DefaultBackgroundPath = Properties.BackgroundSettings.Default.BackgroundPaths[BackgroundListBox.SelectedIndex];
-                Properties.BackgroundSettings.Default.Save();
-            }
-            Form1 mainForm = this.Owner as Form1;
-            mainForm.SetBackgroundProcedure();
-            RefreshBackgroundList();            
+            BackgroundChart.Series["Фон"].Points.Clear();
+            BackgroundChart.Series["Энергия"].Points.Clear();
         }
 
-        private void AddBackground_Click(object sender, EventArgs e)
+        void ShowBackground()
         {
-            using (var openFileDialog = new OpenFileDialog())
+            ClearChart();
+            switch (GeometryComboBox.Text)
             {
-                openFileDialog.Multiselect = false;
-                openFileDialog.Filter = "АТОМТЕХ Спектр (*.ats)|*.ats";
-                if (openFileDialog.ShowDialog() == DialogResult.OK)
-                {
-                    Properties.BackgroundSettings.Default.BackgroundPaths.Add(openFileDialog.FileName);
-                    Properties.BackgroundSettings.Default.BackgroundNames.Add(openFileDialog.SafeFileName);
-                    Properties.BackgroundSettings.Default.Save();
-                    RefreshBackgroundList();
-                }
+                case "Сосуд 0.5 л":
+                    Background.Geometry = 0;
+                    break;
+                case "Сосуд 0.1 л":
+                    Background.Geometry = 1;
+                    break;
+                case "Точечная":
+                    Background.Geometry = 2;
+                    break;
             }
+            Background.FileLines = System.IO.File.ReadAllLines(Properties.BackgroundSettings.Default.Geometries[Background.Geometry]);
+            for (int counterI = 0; counterI < Background.FileLines.Length; counterI++)
+            {
+                if (Background.FileLines[counterI].Substring(0, 4) == "TIME") Background.Time = int.Parse(Background.FileLines[counterI].Substring(7));
+                if (Background.FileLines[counterI].Substring(0, 6) == "SPECTR") Background.GammaSpectrStartPosition = counterI + 1;
+                if (Background.FileLines[counterI].Length > 12 && Background.FileLines[counterI].Substring(0, 12) == "ECALIBRATION") Background.EnergyStartPosition = counterI + 1;
+            }
+            for (int counterI = 0; counterI < 1024; counterI++)
+            {
+                Background.GammaSpectr[counterI] = double.Parse(Background.FileLines[counterI + Background.GammaSpectrStartPosition].Replace('.', ','));
+                Background.Energy[counterI] = double.Parse(Background.FileLines[counterI + Background.EnergyStartPosition].Replace('.', ','));
+                BackgroundChart.Series["Фон"].Points.Add(new SeriesPoint(counterI + 1, Background.GammaSpectr[counterI]));
+                BackgroundChart.Series["Энергия"].Points.Add(new SeriesPoint(counterI + 1, Math.Round(Background.Energy[counterI],1)));
+            }
+            ExposureTimeLabel.Text = Background.Time + " c";
         }
 
-        private void DeleteBackground_Click(object sender, EventArgs e)
+        private void GeometryComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (Properties.BackgroundSettings.Default.DefaultBackgroundName.ToString() == BackgroundListBox.SelectedItem.ToString())
-            {
-                MessageBox.Show("Попытка удалить фон по умолчанию!",
-                        "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-            else
-            {
-                Properties.BackgroundSettings.Default.BackgroundPaths.Remove(BackgroundListBox.SelectedItem.ToString());
-                Properties.BackgroundSettings.Default.BackgroundNames.Remove(BackgroundListBox.SelectedItem.ToString());
-                Properties.BackgroundSettings.Default.Save();
-                RefreshBackgroundList();
-            }
+            ShowBackground();
         }
 
-        private void ResetBackgroundButton_Click(object sender, EventArgs e)
+        private void BackgroundSettings_SizeChanged(object sender, EventArgs e)
         {
-            Properties.BackgroundSettings.Default.Reset();
-            Properties.BackgroundSettings.Default.Save();
-            RefreshBackgroundList();
+            BackgroundChart.Height = this.ClientSize.Height - 47;
+            BackgroundChart.Width = this.ClientSize.Width - 20;
         }
     }
 }

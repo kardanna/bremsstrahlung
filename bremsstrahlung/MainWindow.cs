@@ -30,9 +30,9 @@ using DevExpress.XtraCharts;
 
 namespace bremsstrahlung
 {
-    public partial class Form1 : Form
+    public partial class MainWindow : Form
     {
-        public Form1()
+        public MainWindow()
         {
             InitializeComponent();
             //Задание размеров и положений элементов окна
@@ -51,6 +51,7 @@ namespace bremsstrahlung
             public string FileName { get; set; }
             public string[] FileLines { get; set; }
             public int Time { get; set; }
+            public int Geometry { get; set; }
             public int GammaSpectrStartPosition { get; set; }
             public int BetaSpectrStartPosition { get; set; }
             public int ResolutionStartPosition { get; set; }
@@ -82,15 +83,28 @@ namespace bremsstrahlung
 
 
         void OpenFileProcedure()
-        {
+        {            
             Spectr.FileLines = System.IO.File.ReadAllLines(Spectr.FileName);
             for (int counterI = 0; counterI < Spectr.FileLines.Length; counterI++)
             {
                 if (Spectr.FileLines[counterI].Substring(0, 4) == "TIME") Spectr.Time = int.Parse(Spectr.FileLines[counterI].Substring(7));
+                if (Spectr.FileLines[counterI].Length > 8 && Spectr.FileLines[counterI].Substring(0, 8) == "GEOMETRY") Spectr.Geometry = int.Parse(Spectr.FileLines[counterI].Substring(11));
                 if (Spectr.FileLines[counterI].Substring(0, 6) == "SPECTR") Spectr.GammaSpectrStartPosition = counterI + 1;
                 if (Spectr.FileLines[counterI].Length > 12 && Spectr.FileLines[counterI].Substring(0, 12) == "RCALIBRATION") Spectr.ResolutionStartPosition = counterI + 1;
                 if (Spectr.FileLines[counterI].Length > 12 && Spectr.FileLines[counterI].Substring(0, 12) == "ECALIBRATION") Spectr.EnergyStartPosition = counterI + 1;
                 if (Spectr.FileLines[counterI].Length > 14 && Spectr.FileLines[counterI].Substring(0, 14) == "EFFCALIBRATION") Spectr.BetaSpectrStartPosition = counterI + 1;
+            }
+            switch (Spectr.Geometry)
+            {
+                case 4:
+                    Spectr.Geometry = 0;
+                    break;
+                case 2:
+                    Spectr.Geometry = 1;
+                    break;
+                case 5:
+                    Spectr.Geometry = 2;
+                    break;
             }
             for (int counterI = 0; counterI < 1024; counterI++)
             {
@@ -99,6 +113,7 @@ namespace bremsstrahlung
                 Spectr.Resolution[counterI] = double.Parse(Spectr.FileLines[counterI + Spectr.ResolutionStartPosition].Replace('.', ','));
                 Spectr.Energy[counterI] = double.Parse(Spectr.FileLines[counterI + Spectr.EnergyStartPosition].Replace('.', ','));
             }
+            SetBackgroundProcedure();
             for (int counterI = 0; counterI < 1024; counterI++)
             {
                 if (Background.Energy[counterI] != Spectr.Energy[counterI])
@@ -130,7 +145,7 @@ namespace bremsstrahlung
         void ChooseWithOrWithoutBackground()
         {
             WorkingSpectr = Spectr.Clone() as SpectrFile;
-            if (BackgroundSunstraction.Checked == true)
+            if (BackgroundSubstraction.Checked == true)
             {
                 for (int counterI = 0; counterI < 1024; counterI++)
                 {
@@ -143,7 +158,7 @@ namespace bremsstrahlung
 
         public void SetBackgroundProcedure()
         {
-            Background.FileLines = System.IO.File.ReadAllLines(Properties.BackgroundSettings.Default.DefaultBackgroundPath);
+            Background.FileLines = System.IO.File.ReadAllLines(Properties.BackgroundSettings.Default.Geometries[Spectr.Geometry]);
             for (int counterI = 0; counterI < Background.FileLines.Length; counterI++)
             {
                  if (Background.FileLines[counterI].Substring(0, 4) == "TIME") Background.Time = int.Parse(Background.FileLines[counterI].Substring(7));
@@ -196,13 +211,17 @@ namespace bremsstrahlung
 
         private void BackgroundSunstraction_Click(object sender, EventArgs e)
         {
-            if (BackgroundSunstraction.Checked == true)
+            if (BackgroundSubstraction.Checked == true)
             {
-                BackgroundSunstraction.Checked = false;
+                BackgroundSubstraction.Checked = false;
+                BackgroundSubstraction.Image = Properties.Resources.Report_16x;
+                BackgroundSubstraction.Text = "Фон не вычтен";
             }
             else
             {
-                BackgroundSunstraction.Checked = true;
+                BackgroundSubstraction.Checked = true;
+                BackgroundSubstraction.Image = Properties.Resources.SubReport_16x;
+                BackgroundSubstraction.Text = "Фон вычтен";
             }
             ChooseWithOrWithoutBackground();
         }
@@ -219,15 +238,6 @@ namespace bremsstrahlung
                     Spectr.FileName = openFileDialog.FileName;
                     OpenFileProcedure();
                 }
-            }
-        }
-
-        public void DrawFromHandlerProcedure(double[] SmoothingSource)
-        {
-            GammaSpectrChart.Series["Сглаживание"].Points.Clear();
-            for (int counterI = 0; counterI < 1024; counterI++)
-            {
-                GammaSpectrChart.Series["Сглаживание"].Points.Add(new SeriesPoint(counterI + 1, SmoothingSource[counterI]));
             }
         }
 
@@ -288,6 +298,13 @@ namespace bremsstrahlung
         private void CloseMenuItem_Click(object sender, EventArgs e)
         {
             Application.Exit();
+        }
+
+        private void RegistrationEfficiencySettingsMenuItem_Click(object sender, EventArgs e)
+        {
+            RegistrationEfficiencySettings registrationEfficiencySettings = new RegistrationEfficiencySettings();
+            registrationEfficiencySettings.Owner = this;
+            registrationEfficiencySettings.Show();
         }
     }
 }

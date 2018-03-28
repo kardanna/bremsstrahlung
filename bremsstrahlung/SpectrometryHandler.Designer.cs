@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SpectrometryHandler));
             this.StartHanler = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.radioButton26 = new System.Windows.Forms.RadioButton();
@@ -69,10 +70,7 @@
             this.LowerDetectionThresholdTextBox = new System.Windows.Forms.TextBox();
             this.label8 = new System.Windows.Forms.Label();
             this.Sensetivity = new System.Windows.Forms.TextBox();
-            this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            this.IsChecked = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-            this.Energy = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Channel = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ResultsTable = new System.Windows.Forms.DataGridView();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.radioButton27 = new System.Windows.Forms.RadioButton();
             this.radioButton28 = new System.Windows.Forms.RadioButton();
@@ -90,12 +88,21 @@
             this.radioButton39 = new System.Windows.Forms.RadioButton();
             this.label10 = new System.Windows.Forms.Label();
             this.textBox1 = new System.Windows.Forms.TextBox();
-            this.richTextBox1 = new System.Windows.Forms.RichTextBox();
-            this.checkBox1 = new System.Windows.Forms.CheckBox();
+            this.UseQuintana = new System.Windows.Forms.CheckBox();
+            this.NuclideErrorTextBox = new System.Windows.Forms.TextBox();
+            this.label11 = new System.Windows.Forms.Label();
+            this.RecalculateActivities = new System.Windows.Forms.Button();
+            this.IsChecked = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.Energy = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Nuclide = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.LeftEdge = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.RightEdge = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Activity = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.QuantumYield = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ResultsTable)).BeginInit();
             this.groupBox4.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -534,39 +541,23 @@
             this.Sensetivity.TabIndex = 8;
             this.Sensetivity.Text = "10";
             // 
-            // dataGridView1
+            // ResultsTable
             // 
-            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.ResultsTable.BackgroundColor = System.Drawing.SystemColors.Control;
+            this.ResultsTable.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.ResultsTable.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.IsChecked,
             this.Energy,
-            this.Channel});
-            this.dataGridView1.Location = new System.Drawing.Point(12, 365);
-            this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.RowHeadersVisible = false;
-            this.dataGridView1.Size = new System.Drawing.Size(340, 151);
-            this.dataGridView1.TabIndex = 9;
-            // 
-            // IsChecked
-            // 
-            this.IsChecked.Frozen = true;
-            this.IsChecked.HeaderText = "";
-            this.IsChecked.Name = "IsChecked";
-            this.IsChecked.Width = 25;
-            // 
-            // Energy
-            // 
-            this.Energy.Frozen = true;
-            this.Energy.HeaderText = "Энергия";
-            this.Energy.Name = "Energy";
-            this.Energy.Width = 165;
-            // 
-            // Channel
-            // 
-            this.Channel.Frozen = true;
-            this.Channel.HeaderText = "Канал";
-            this.Channel.Name = "Channel";
-            this.Channel.Width = 160;
+            this.Nuclide,
+            this.LeftEdge,
+            this.RightEdge,
+            this.Activity,
+            this.QuantumYield});
+            this.ResultsTable.Location = new System.Drawing.Point(21, 365);
+            this.ResultsTable.Name = "ResultsTable";
+            this.ResultsTable.RowHeadersVisible = false;
+            this.ResultsTable.Size = new System.Drawing.Size(649, 151);
+            this.ResultsTable.TabIndex = 9;
             // 
             // groupBox4
             // 
@@ -744,40 +735,106 @@
             // 
             // textBox1
             // 
-            this.textBox1.Location = new System.Drawing.Point(358, 261);
+            this.textBox1.Location = new System.Drawing.Point(555, 258);
             this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(100, 20);
+            this.textBox1.Size = new System.Drawing.Size(51, 20);
             this.textBox1.TabIndex = 11;
             this.textBox1.Text = "0,01";
             // 
-            // richTextBox1
+            // UseQuintana
             // 
-            this.richTextBox1.Location = new System.Drawing.Point(358, 287);
-            this.richTextBox1.Name = "richTextBox1";
-            this.richTextBox1.Size = new System.Drawing.Size(340, 229);
-            this.richTextBox1.TabIndex = 12;
-            this.richTextBox1.Text = "";
+            this.UseQuintana.AutoSize = true;
+            this.UseQuintana.Location = new System.Drawing.Point(358, 262);
+            this.UseQuintana.Name = "UseQuintana";
+            this.UseQuintana.Size = new System.Drawing.Size(108, 17);
+            this.UseQuintana.TabIndex = 13;
+            this.UseQuintana.Text = "Метод Куинтана";
+            this.UseQuintana.UseVisualStyleBackColor = true;
             // 
-            // checkBox1
+            // NuclideErrorTextBox
             // 
-            this.checkBox1.AutoSize = true;
-            this.checkBox1.Location = new System.Drawing.Point(464, 263);
-            this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(91, 17);
-            this.checkBox1.TabIndex = 13;
-            this.checkBox1.Text = "Bad Quintana";
-            this.checkBox1.UseVisualStyleBackColor = true;
+            this.NuclideErrorTextBox.Location = new System.Drawing.Point(555, 284);
+            this.NuclideErrorTextBox.Name = "NuclideErrorTextBox";
+            this.NuclideErrorTextBox.Size = new System.Drawing.Size(51, 20);
+            this.NuclideErrorTextBox.TabIndex = 14;
+            this.NuclideErrorTextBox.Text = "1";
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(355, 287);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(194, 13);
+            this.label11.TabIndex = 15;
+            this.label11.Text = "Погрешность определения нуклидов";
+            // 
+            // RecalculateActivities
+            // 
+            this.RecalculateActivities.Location = new System.Drawing.Point(367, 336);
+            this.RecalculateActivities.Name = "RecalculateActivities";
+            this.RecalculateActivities.Size = new System.Drawing.Size(93, 23);
+            this.RecalculateActivities.TabIndex = 16;
+            this.RecalculateActivities.Text = "Пересчитать";
+            this.RecalculateActivities.UseVisualStyleBackColor = true;
+            this.RecalculateActivities.Click += new System.EventHandler(this.RecalculateActivities_Click);
+            // 
+            // IsChecked
+            // 
+            this.IsChecked.Frozen = true;
+            this.IsChecked.HeaderText = "";
+            this.IsChecked.Name = "IsChecked";
+            this.IsChecked.Width = 25;
+            // 
+            // Energy
+            // 
+            this.Energy.Frozen = true;
+            this.Energy.HeaderText = "Энергия, кэВ";
+            this.Energy.Name = "Energy";
+            this.Energy.Width = 150;
+            // 
+            // Nuclide
+            // 
+            this.Nuclide.Frozen = true;
+            this.Nuclide.HeaderText = "Нуклид";
+            this.Nuclide.Name = "Nuclide";
+            this.Nuclide.Width = 150;
+            // 
+            // LeftEdge
+            // 
+            this.LeftEdge.HeaderText = "Правая граница";
+            this.LeftEdge.Name = "LeftEdge";
+            this.LeftEdge.Visible = false;
+            // 
+            // RightEdge
+            // 
+            this.RightEdge.HeaderText = "Правая граница";
+            this.RightEdge.Name = "RightEdge";
+            this.RightEdge.Visible = false;
+            // 
+            // Activity
+            // 
+            this.Activity.HeaderText = "Активность, Бк";
+            this.Activity.Name = "Activity";
+            this.Activity.Width = 170;
+            // 
+            // QuantumYield
+            // 
+            this.QuantumYield.HeaderText = "Квантовый выход, %";
+            this.QuantumYield.Name = "QuantumYield";
+            this.QuantumYield.Width = 150;
             // 
             // SpectrometryHandler
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(708, 528);
-            this.Controls.Add(this.checkBox1);
-            this.Controls.Add(this.richTextBox1);
+            this.ClientSize = new System.Drawing.Size(707, 523);
+            this.Controls.Add(this.RecalculateActivities);
+            this.Controls.Add(this.label11);
+            this.Controls.Add(this.NuclideErrorTextBox);
+            this.Controls.Add(this.UseQuintana);
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.groupBox4);
-            this.Controls.Add(this.dataGridView1);
+            this.Controls.Add(this.ResultsTable);
             this.Controls.Add(this.Sensetivity);
             this.Controls.Add(this.label8);
             this.Controls.Add(this.LowerDetectionThresholdTextBox);
@@ -787,6 +844,7 @@
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.StartHanler);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "SpectrometryHandler";
             this.Text = "Спектрометрическая обработка";
             this.groupBox1.ResumeLayout(false);
@@ -795,7 +853,7 @@
             this.groupBox2.PerformLayout();
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ResultsTable)).EndInit();
             this.groupBox4.ResumeLayout(false);
             this.groupBox4.PerformLayout();
             this.ResumeLayout(false);
@@ -838,10 +896,7 @@
         private System.Windows.Forms.TextBox LowerDetectionThresholdTextBox;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.TextBox Sensetivity;
-        private System.Windows.Forms.DataGridView dataGridView1;
-        private System.Windows.Forms.DataGridViewCheckBoxColumn IsChecked;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Energy;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Channel;
+        private System.Windows.Forms.DataGridView ResultsTable;
         private System.Windows.Forms.RadioButton radioButton26;
         private System.Windows.Forms.RadioButton radioButton25;
         private System.Windows.Forms.RadioButton radioButton24;
@@ -867,7 +922,16 @@
         private System.Windows.Forms.RadioButton radioButton39;
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.TextBox textBox1;
-        private System.Windows.Forms.RichTextBox richTextBox1;
-        private System.Windows.Forms.CheckBox checkBox1;
+        private System.Windows.Forms.CheckBox UseQuintana;
+        private System.Windows.Forms.TextBox NuclideErrorTextBox;
+        private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.Button RecalculateActivities;
+        private System.Windows.Forms.DataGridViewCheckBoxColumn IsChecked;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Energy;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Nuclide;
+        private System.Windows.Forms.DataGridViewTextBoxColumn LeftEdge;
+        private System.Windows.Forms.DataGridViewTextBoxColumn RightEdge;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Activity;
+        private System.Windows.Forms.DataGridViewTextBoxColumn QuantumYield;
     }
 }
